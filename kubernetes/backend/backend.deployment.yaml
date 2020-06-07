@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: gcr.io/developer-269501/k8s-with-google-storage/backend
+          ports:
+            - name: http-server
+              containerPort: 8080
+          volumeMounts:
+            - name: nfs-bucket
+              mountPath: "/app/data"
+      volumes:
+        - name: nfs-bucket
+          persistentVolumeClaim:
+            claimName: nfs-bucket
